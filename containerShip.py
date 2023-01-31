@@ -177,8 +177,16 @@ def Ship_PileContainer(ship, container):
     Ship_PushContainers(ship, poppedContainers)
 
 
+def Ship_GetTotalWeightOfContainers(ship):
+    containers = Ship_GetContainers(ship)
+    weight = 0
+    for container in containers:
+        weight += Container_GetTotalWeight(container)
+    return weight
+
 # 4: Printer
 # ----------
+
 
 def Printer_PrintContainer(container):
     serialNumber = Container_GetSerialNumber(container)
