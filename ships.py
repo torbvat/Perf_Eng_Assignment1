@@ -1,4 +1,4 @@
-from container import Container, ContainerSet
+from container import Container
 
 
 #Finn ei løsning for 40-fots containere, mhp at de tar opp 2 celler/bays
