@@ -91,13 +91,14 @@ containersInTrondheim = []
 # writeToFile(generateRandomContainerSet(5))
 
 # c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24 = generateRandomContainerSet(24)
+
 print()
 
 ship1 = ContainerShip(6, 4, 4)
 
-ship1.loadNewContainerSet(generateRandomContainerSet(24))
+ship1.loadNewContainerSet(generateRandomContainerSet(128))
 
-
+print(ship1.hasSingleOnHold())
 print("Front left: ")
 print(f"{ship1.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
 print("Front right: ")
@@ -110,3 +111,12 @@ print("Rear left")
 print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
 print("Rear right")
 print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
+
+# c1, c2, c3 = generateRandomContainerSet(3)
+# ship1 = ContainerShip(6, 4, 4)
+
+# liste = [[c1, c1], [c2, c3]]
+# print(f"{c1.length} + {c1.totalWeight}")
+# print(f"{c2.length} + {c2.totalWeight}")
+# print(f"{c3.length} + {c3.totalWeight}")
+# print(ship1.getTotalWeightOfCell(liste[0]))

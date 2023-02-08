@@ -1,62 +1,111 @@
 from container import Container
 # import main
 
+
 class ContainerShip:
     def __init__(self, length, width, height):
         self._length = length
         self._width = width
         self._height = height
-        
+
         sectionWidth = width//2
         sectionLength = length//3
-        self._frontLeft = [[0] for _ in range(sectionWidth * sectionLength)]
-        self._frontRight = [[0] for _ in range(sectionWidth * sectionLength)]
-        self._middleRight = [[0] for _ in range(sectionWidth * sectionLength)]
-        self._middleLeft = [[0] for _ in range(sectionWidth * sectionLength)]
-        self._rearRight = [[0] for _ in range(sectionWidth * sectionLength)]
-        self._rearLeft = [[0] for _ in range(sectionWidth * sectionLength)]
-        self._sections = [self._frontLeft, self._frontRight, self._middleLeft, self._middleRight, self._rearLeft, self._rearRight]
-        
+        self._frontLeft = [[[0, 0]]
+                           for _ in range(sectionWidth * sectionLength)]
+        self._frontRight = [[[0, 0]]
+                            for _ in range(sectionWidth * sectionLength)]
+        self._middleRight = [[[0, 0]]
+                             for _ in range(sectionWidth * sectionLength)]
+        self._middleLeft = [[[0, 0]]
+                            for _ in range(sectionWidth * sectionLength)]
+        self._rearRight = [[[0, 0]]
+                           for _ in range(sectionWidth * sectionLength)]
+        self._rearLeft = [[[0, 0]]
+                          for _ in range(sectionWidth * sectionLength)]
+        self._sections = [self._frontLeft, self._frontRight, self._middleLeft,
+                          self._middleRight, self._rearLeft, self._rearRight]
+        self._singleContainers = []
+
     @property
     def length(self):
-        return self._length   
+        return self._length
 
     @property
     def width(self):
-        return self._width  
+        return self._width
 
     @property
     def height(self):
-        return self._height     
-    
+        return self._height
+
     @property
     def frontLeft(self):
         return self._frontLeft
-    
+
     @property
     def frontRight(self):
         return self._frontRight
-    
+
     @property
     def middleLeft(self):
         return self._middleLeft
-    
+
     @property
     def middleRight(self):
         return self._middleRight
-    
+
     @property
     def rearLeft(self):
         return self._rearLeft
-    
+
     @property
     def rearRight(self):
         return self._rearRight
-    
-    @property 
+
+    @property
     def sections(self):
-            return self._sections
-    
+        return self._sections
+
+    @property
+    def singleContainers(self):
+        return self._singleContainers
+
+    @singleContainers.setter
+    def singleContainers(self, singleContainers):
+        self._singleContainers = singleContainers
+
+    # Good
+    def hasSingleOnHold(self):
+        if len(self.singleContainers) == 0:
+            return False
+        else:
+            return True
+
+    # Good
+    def emptySingleContainers(self):
+        self.singleContainers = []
+
+    def isEmptyCell(self, containerCell):
+        if containerCell[0] == 0 and containerCell[1] == 0:
+            return True
+        else:
+            return False
+
+    def getTotalWeightOfCell(self, containerCell):
+        totalWeight = 0
+        if not self.isEmptyCell(containerCell):
+            totalWeight += containerCell[0].totalWeight
+            if containerCell[0].length == 20:
+                totalWeight += containerCell[1].totalWeight
+
+        return totalWeight
+
+    def getTotalWeightOfStack(self, stack):
+        totalWeight = 0
+        for containerCell in stack:
+            totalWeight += self.getTotalWeightOfCell(containerCell)
+        return totalWeight
+
     def getTotalWeightOfSection(self, section):
         totalWeight = 0
         for stack in section:
@@ -69,36 +118,41 @@ class ContainerShip:
             if self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestSection):
                 lightestSection = section
         return lightestSection
-    
-    def getTotalWeightOfStack(self, stack):
-        totalWeight = 0
-        for container in stack:
-            if container != 0:
-                totalWeight += container.totalWeight
-        return totalWeight
-        
+
     def getLightestAvailableStackInSection(self, section):
         lightestAvailableStack = section[0]
         for stack in section:
-            if self.getTotalWeightOfStack(stack) < self.getTotalWeightOfStack(lightestAvailableStack) and (stack[-1] == 0):
+            if self.getTotalWeightOfStack(stack) < self.getTotalWeightOfStack(lightestAvailableStack) and (stack[-1] == [0, 0]):
                 lightestAvailableStack = stack
         return lightestAvailableStack
-    
-    def getOptimalLoadPlacementForContainer(self, container):
+
+    def getOptimalLoadPlacementForContainer(self, containerCell):
         lightestSection = self.getLightestSection()
-        lightestStack = self.getLightestAvailableStackInSection(lightestSection)
+        lightestStack = self.getLightestAvailableStackInSection(
+            lightestSection)
         for i in range(len(lightestStack)):
-            if lightestStack[i] == 0 or lightestStack[i].totalWeight < container.totalWeight:
+            if self.isEmptyCell(lightestStack[i]) or self.getTotalWeightOfCell(lightestStack[i]) < self.getTotalWeightOfCell(containerCell):
                 return lightestStack, i
-                # lightestStack.insert(i, container)
-    
+
     def loadNewContainer(self, container):
-        stack, index = self.getOptimalLoadPlacementForContainer(container)
-        if index == (self.height -1):
-            stack[-1] = container
+        containerCell = []
+        if container.length == 20:
+            if self.hasSingleOnHold():
+                containerCell = self.singleContainers
+                self.emptySingleContainers()
+                containerCell.append(container)
+            else:
+                self.singleContainers.append(container)
+                return
         else:
-            stack.insert(index, container)
-        
+            containerCell = [container, container]
+
+        stack, index = self.getOptimalLoadPlacementForContainer(containerCell)
+        if index == (self.height - 1):
+            stack[-1] = containerCell
+        else:
+            stack.insert(index, containerCell)
+
     def loadNewContainerSet(self, containers):
         for container in containers:
             self.loadNewContainer(container)
@@ -110,7 +164,6 @@ class ContainerShip:
                     if container.serialNumber is not None and container.serialNumber == serialNumber:
                         return stack, stack.index(container), container
         raise ValueError("Container could not be found on the ship")
-        
 
     def unload_container(self, serialNumber):
         position = self.look_for_container(serialNumber)
@@ -119,7 +172,6 @@ class ContainerShip:
             container = stack.pop(index)
             # main.containersInTrondheim.append(container)
 
-            
     # def print_to_file(self, file_name):
     #     with open(file_name, 'w') as f:
     #         for l in range(self.length):
@@ -134,7 +186,7 @@ class ContainerShip:
     #             l, w, h, code = line.strip().split()
     #             container = ContainerSet.look_for_container(code)
     #             self.load_container(container, (int(l), int(w), int(h)))
-    
+
     # def load_from_set(self, container_set):
     #     containers = container_set.get_containers()
     #     loaded_containers = []
@@ -148,6 +200,3 @@ class ContainerShip:
 
 # Main
 # -----------------
-
-
-    

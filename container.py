@@ -45,7 +45,7 @@ class Container:
         return self._serialNumber
 
     def __repr__(self):
-        return f"{self.weight + self.loadWeight}"
+        return f"{self.length} + {self.weight + self.loadWeight}"
 
 
 ContainerManager_year = 2023
