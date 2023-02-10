@@ -172,21 +172,23 @@ class ContainerShip:
             container = stack.pop(index)
             # main.containersInTrondheim.append(container)
 
+    # Prints the load of the ship to a file. Does not impact the load of the ship.
     def print_to_file(self, file_name):
         with open(file_name, "w") as f:
             for section in self.sections:
                 for stack in section:
                     for containerCell in stack:
                         if containerCell[0] is not None and containerCell[0] != 0:
-                            f.write(str(containerCell[0]._length) + "," + str(containerCell[0].totalWeight) + "," + containerCell[0]._serialNumber + "\n")
+                            f.write(str(containerCell[0]._length) + "\t" + str(containerCell[0].loadWeight) + "\t" + containerCell[0]._serialNumber + "\n")
                         if containerCell[1] is not None and containerCell[1] != 0 and containerCell[1]._length == 20:
-                            f.write(str(containerCell[1]._length) + "," + str(containerCell[1].totalWeight) + "," + containerCell[1]._serialNumber + "\n")
+                            f.write(str(containerCell[1]._length) + "\t" + str(containerCell[1].loadWeight) + "\t" + containerCell[1]._serialNumber + "\n")
 
+    #Loads the containers from the file onto the ship.  
     def load_from_file(self, file_name):
         with open(file_name, "r") as f:
             for line in f:
-                length, weight, serialNumber = line.strip().split(",")
-                container = Container(length, weight, serialNumber)
+                length, loadWeight, serialNumber = line.strip().split("\t")
+                container = Container(int(length), int(loadWeight), serialNumber)
                 self.loadNewContainer(container)
             
     # def load_from_set(self, container_set):

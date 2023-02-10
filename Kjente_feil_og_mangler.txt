@@ -1,0 +1,14 @@
+Lage en løsning for når vi prøver å laste ship med flere containere enn det er plass til.
+    -Nå får vi feilmelding: 
+            "Traceback (most recent call last):
+        File "c:\Users\torbj\OneDrive\Documentos\Studie\VAR_SEMESTER_2023\Performance engineering\Assignment_1\main.py", line 119, in <module>
+            ship2.load_from_file("containers_on_ship.csv")
+        File "c:\Users\torbj\OneDrive\Documentos\Studie\VAR_SEMESTER_2023\Performance engineering\Assignment_1\ships.py", line 192, in load_from_file
+            self.loadNewContainer(container)
+        File "c:\Users\torbj\OneDrive\Documentos\Studie\VAR_SEMESTER_2023\Performance engineering\Assignment_1\ships.py", line 150, in loadNewContainer
+            stack, index = self.getOptimalLoadPlacementForContainer(containerCell)
+        TypeError: cannot unpack non-iterable NoneType object"
+
+Samme feilmelding kan oppstå når vi er uheldig med loading av skip. 
+Jo større forholdet mellom containere/kapasitet er, jo større sjanse er det for å få denne feilen.
+Ved skip 24x22x8 skjer dette allerede ved lasting av 150 containere.
