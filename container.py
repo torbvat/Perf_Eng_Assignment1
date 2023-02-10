@@ -33,8 +33,8 @@ class Container:
 
     @property
     def totalWeight(self):
-        totalWeight = self.weight + self.loadWeight
-        return totalWeight
+        _totalWeight = self.weight + self.loadWeight
+        return _totalWeight
 
     @loadWeight.setter
     def loadWeight(self, loadWeight):

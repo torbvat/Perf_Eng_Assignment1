@@ -112,6 +112,7 @@ print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}
 print("Rear right")
 print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
 
+ship1.print_to_file("containers2.csv")
 # c1, c2, c3 = generateRandomContainerSet(3)
 # ship1 = ContainerShip(6, 4, 4)
 

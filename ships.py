@@ -172,21 +172,23 @@ class ContainerShip:
             container = stack.pop(index)
             # main.containersInTrondheim.append(container)
 
-    # def print_to_file(self, file_name):
-    #     with open(file_name, 'w') as f:
-    #         for l in range(self.length):
-    #             for w in range(self.width):
-    #                 for h in range(self.height):
-    #                     if self.bays[l][w][h] is not None:
-    #                         f.write(str(l) + ' ' + str(w) + ' ' + str(h) + ' ' + self.bays[l][w][h].get_code() + '\n')
+    def print_to_file(self, file_name):
+        with open(file_name, "w") as f:
+            for section in self.sections:
+                for stack in section:
+                    for containerCell in stack:
+                        if containerCell[0] is not None and containerCell[0] != 0:
+                            f.write(str(containerCell[0]._length) + "," + str(containerCell[0].totalWeight) + "," + containerCell[0]._serialNumber + "\n")
+                        if containerCell[1] is not None and containerCell[1] != 0 and containerCell[1]._length == 20:
+                            f.write(str(containerCell[1]._length) + "," + str(containerCell[1].totalWeight) + "," + containerCell[1]._serialNumber + "\n")
 
-    # def load_from_file(self, file_name):
-    #     with open(file_name, 'r') as f:
-    #         for line in f:
-    #             l, w, h, code = line.strip().split()
-    #             container = ContainerSet.look_for_container(code)
-    #             self.load_container(container, (int(l), int(w), int(h)))
-
+    def load_from_file(self, file_name):
+        with open(file_name, "r") as f:
+            for line in f:
+                length, weight, serialNumber = line.strip().split(",")
+                container = Container(length, weight, serialNumber)
+                self.loadNewContainer(container)
+            
     # def load_from_set(self, container_set):
     #     containers = container_set.get_containers()
     #     loaded_containers = []
