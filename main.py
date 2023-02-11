@@ -98,9 +98,9 @@ print(read_from_file())
 
 print()
 
-ship1 = ContainerShip(12, 22, 18)
+ship1 = ContainerShip(6, 4, 2)
 
-ship1.loadNewContainerSet(generateRandomContainerSet(4752))
+ship1.loadNewContainerSet(generateRandomContainerSet(5558))
 """
 ship1.print_to_file()
 if(ship1.frontLeft[0][0][1]!=0):

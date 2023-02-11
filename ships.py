@@ -111,23 +111,59 @@ class ContainerShip:
         for stack in section:
             totalWeight += self.getTotalWeightOfStack(stack)
         return totalWeight
+    
 
-    def getLightestSection(self):
-        lightestSection = self.frontLeft
+    def isSectionFull(self, section):
+        for stack in section:
+            if stack[-1] == [0, 0]:
+                return False
+        return True
+    
+    def isShipFull(self):
         for section in self.sections:
-            if self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestSection):
-                lightestSection = section
-        return lightestSection
+            if not self.isSectionFull(section):
+                return False
+        return True
+    
+    # Returns the lightest section of the ship with available space
+    def getLightestAvailableSection(self):
+        sectionsWithAvailableSpace = []
+        for section in self.sections:
+            if not self.isSectionFull(section):
+                sectionsWithAvailableSpace.append(section)
 
+        lightestAvailableSection = sectionsWithAvailableSpace[0]
+        for section in sectionsWithAvailableSpace:    
+            if (self.getTotalWeightOfSection(section) <= self.getTotalWeightOfSection(lightestAvailableSection)):
+                lightestAvailableSection = section
+        if self.isSectionFull(lightestAvailableSection):
+            raise ValueError("No available space in ship")
+        return lightestAvailableSection
+    """
+    def getLightestAvailableSection(self):
+    lightestSection = self.frontLeft
+    for section in self.sections:
+        if self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestSection):
+            lightestSection = section
+    return lightestSection
+    """
+    
+    # Returns the lightest stack in a section with available space
     def getLightestAvailableStackInSection(self, section):
         lightestAvailableStack = section[0]
         for stack in section:
-            if self.getTotalWeightOfStack(stack) < self.getTotalWeightOfStack(lightestAvailableStack) and (stack[-1] == [0, 0]):
+            if (self.getTotalWeightOfStack(stack) < self.getTotalWeightOfStack(lightestAvailableStack)) and (stack[-1] == [0, 0]):
                 lightestAvailableStack = stack
+        if lightestAvailableStack[-1] != [0, 0]:
+            print(lightestAvailableStack[-1])
+            raise ValueError("No available space in section")
         return lightestAvailableStack
+            
 
     def getOptimalLoadPlacementForContainer(self, containerCell):
-        lightestSection = self.getLightestSection()
+        if self.isShipFull():
+            raise ValueError("Ship is full")
+        lightestSection = self.getLightestAvailableSection()
         lightestStack = self.getLightestAvailableStackInSection(
             lightestSection)
         for i in range(len(lightestStack)):
@@ -135,6 +171,9 @@ class ContainerShip:
                 return lightestStack, i
 
     def loadNewContainer(self, container):
+        if self.isShipFull():
+            print("feil 1")
+            return
         containerCell = []
         if container.length == 20:
             if self.hasSingleOnHold():
@@ -156,9 +195,13 @@ class ContainerShip:
 
     def loadNewContainerSet(self, containers):
         for container in containers:
-            self.loadNewContainer(container)
+            if self.isShipFull():
+                print("Ship is full")
+                return
+            else:
+                self.loadNewContainer(container)
 
-    def look_for_container(self, serialNumber):
+    def lookForContainer(self, serialNumber):
         for section in self.sections:
             for stack in section:
                 for container in stack:
@@ -167,7 +210,7 @@ class ContainerShip:
         raise ValueError("Container could not be found on the ship")
 
     def unload_container(self, serialNumber):
-        position = self.look_for_container(serialNumber)
+        position = self.lookForContainer(serialNumber)
         if position is not None:
             stack, index = position
             container = stack.pop(index)
