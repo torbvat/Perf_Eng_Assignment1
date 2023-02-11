@@ -71,11 +71,12 @@ containersInTrondheim = []
 
 # Main
 # --------------------
+"""
 containerSet = generateRandomContainerSet(10)
 print(containerSet)
 write_to_file(containerSet)
 print(read_from_file())
-
+"""
 # container1 = generateRandomContainer()
 # container2 = generateRandomContainer()
 # container3 = generateRandomContainer()
@@ -96,11 +97,11 @@ print(read_from_file())
 # c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24 = generateRandomContainerSet(24)
 
 print()
+
+ship1 = ContainerShip(12, 22, 18)
+
+ship1.loadNewContainerSet(generateRandomContainerSet(4752))
 """
-ship1 = ContainerShip(6, 4, 2)
-
-ship1.loadNewContainerSet(generateRandomContainerSet(20))
-
 ship1.print_to_file()
 if(ship1.frontLeft[0][0][1]!=0):
     print(ship1.frontLeft[0][0][1].serialNumber)
@@ -108,7 +109,7 @@ ship2 = ContainerShip(6, 4, 4)
 ship2.load_from_file()
 if(ship2.frontLeft[0][0][1]!=0):
     print(ship2.frontLeft[0][0][1].serialNumber)
-
+"""
 print(ship1.hasSingleOnHold())
 print("Front left: ")
 print(f"{ship1.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
@@ -122,7 +123,7 @@ print("Rear left")
 print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
 print("Rear right")
 print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
-"""
+
 """
 print(ship2.hasSingleOnHold())
 print("Front left: ")

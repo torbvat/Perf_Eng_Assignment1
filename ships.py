@@ -10,17 +10,17 @@ class ContainerShip:
 
         sectionWidth = width//2
         sectionLength = length//3
-        self._frontLeft = [[[0, 0]]
+        self._frontLeft = [[[0, 0]]*height
                            for _ in range(sectionWidth * sectionLength)]
-        self._frontRight = [[[0, 0]]
+        self._frontRight = [[[0, 0]]*height
                             for _ in range(sectionWidth * sectionLength)]
-        self._middleRight = [[[0, 0]]
+        self._middleRight = [[[0, 0]]*height
                              for _ in range(sectionWidth * sectionLength)]
-        self._middleLeft = [[[0, 0]]
+        self._middleLeft = [[[0, 0]]*height
                             for _ in range(sectionWidth * sectionLength)]
-        self._rearRight = [[[0, 0]]
+        self._rearRight = [[[0, 0]]*height
                            for _ in range(sectionWidth * sectionLength)]
-        self._rearLeft = [[[0, 0]]
+        self._rearLeft = [[[0, 0]]*height
                           for _ in range(sectionWidth * sectionLength)]
         self._sections = [self._frontLeft, self._frontRight, self._middleLeft,
                           self._middleRight, self._rearLeft, self._rearRight]
@@ -152,6 +152,7 @@ class ContainerShip:
             stack[-1] = containerCell
         else:
             stack.insert(index, containerCell)
+            stack.pop(-1)
 
     def loadNewContainerSet(self, containers):
         for container in containers:
