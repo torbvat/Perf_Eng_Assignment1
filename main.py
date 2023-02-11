@@ -50,28 +50,31 @@ def generateRandomContainerSet(n):
 # --------------------
 
 
-def writeToFile(containerSet):
-    f = open("containers.csv", "w", newline="")
-    writer = csv.writer(f)
-    tup1 = ("Unique code", "length", "weight", "loadWeight")
-    writer.writerow(tup1)
-    for container in containerSet:
-        tuple = (container.serialNumber, container.length,
-                 container.weight, container.loadWeight)
-        writer.writerow(tuple)
+def write_to_file(containerSet):
+    with open("containers.csv", "w") as f:
+        for container in containerSet:
+            f.write(f"{container.length}\t{container.weight}\t{container.loadWeight}\t{container.serialNumber}\n")
 
-    f.close()
-
+def read_from_file():
+    containerSet = []
+    with open("containers.csv", "r") as f:
+        for line in f:
+            line = line.split("\t")
+            container = Container(int(line[0]), int(line[2]), line[3])
+            containerSet.append(container)
+    return containerSet
 
 containersInTrondheim = []
-
 # Ship
 # --------------------
 
 
 # Main
 # --------------------
-
+containerSet = generateRandomContainerSet(10)
+print(containerSet)
+write_to_file(containerSet)
+print(read_from_file())
 
 # container1 = generateRandomContainer()
 # container2 = generateRandomContainer()
@@ -93,16 +96,16 @@ containersInTrondheim = []
 # c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24 = generateRandomContainerSet(24)
 
 print()
-
+"""
 ship1 = ContainerShip(6, 4, 2)
 
-ship1.loadNewContainerSet(generateRandomContainerSet(2))
+ship1.loadNewContainerSet(generateRandomContainerSet(20))
 
-ship1.print_to_file("containers_on_ship.csv")
+ship1.print_to_file()
 if(ship1.frontLeft[0][0][1]!=0):
     print(ship1.frontLeft[0][0][1].serialNumber)
 ship2 = ContainerShip(6, 4, 4)
-ship2.load_from_file("containers_on_ship.csv")
+ship2.load_from_file()
 if(ship2.frontLeft[0][0][1]!=0):
     print(ship2.frontLeft[0][0][1].serialNumber)
 
@@ -119,7 +122,22 @@ print("Rear left")
 print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
 print("Rear right")
 print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
-
+"""
+"""
+print(ship2.hasSingleOnHold())
+print("Front left: ")
+print(f"{ship2.frontLeft} weight: {ship2.getTotalWeightOfSection(ship2.frontLeft)}")
+print("Front right: ")
+print(f"{ship2.frontRight} weight: {ship2.getTotalWeightOfSection(ship2.frontRight)}")
+print("Middle left")
+print(f"{ship2.middleLeft} weight: {ship2.getTotalWeightOfSection(ship2.middleLeft)}")
+print("Middle right")
+print(f"{ship2.middleRight} weight: {ship2.getTotalWeightOfSection(ship2.middleRight)}")
+print("Rear left")
+print(f"{ship2.rearLeft} weight: {ship2.getTotalWeightOfSection(ship2.rearLeft)}")
+print("Rear right")
+print(f"{ship2.rearRight} weight: {ship2.getTotalWeightOfSection(ship2.rearRight)}")
+"""
 
 """
 print("Front left: ")
