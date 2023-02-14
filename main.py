@@ -53,7 +53,9 @@ def generateRandomContainerSet(n):
 def write_to_file(containerSet):
     with open("containers.csv", "w") as f:
         for container in containerSet:
-            f.write(f"{container.length}\t{container.weight}\t{container.loadWeight}\t{container.serialNumber}\n")
+            f.write(
+                f"{container.length}\t{container.weight}\t{container.loadWeight}\t{container.serialNumber}\n")
+
 
 def read_from_file():
     containerSet = []
@@ -63,6 +65,7 @@ def read_from_file():
             container = Container(int(line[0]), int(line[2]), line[3])
             containerSet.append(container)
     return containerSet
+
 
 containersInTrondheim = []
 # Ship
@@ -100,7 +103,7 @@ print()
 
 ship1 = ContainerShip(6, 4, 2)
 
-ship1.loadNewContainerSet(generateRandomContainerSet(5558))
+ship1.loadNewContainerSet(generateRandomContainerSet(10000))
 """
 ship1.print_to_file()
 if(ship1.frontLeft[0][0][1]!=0):

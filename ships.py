@@ -1,4 +1,5 @@
 from container import Container
+import math
 # import main
 
 
@@ -8,23 +9,25 @@ class ContainerShip:
         self._width = width
         self._height = height
 
-        sectionWidth = width//2
-        sectionLength = length//3
+        cellWidth = width//2
+        cellLength = length//6
         self._frontLeft = [[[0, 0]]*height
-                           for _ in range(sectionWidth * sectionLength)]
+                           for _ in range(cellWidth * cellLength)]
         self._frontRight = [[[0, 0]]*height
-                            for _ in range(sectionWidth * sectionLength)]
+                            for _ in range(cellWidth * cellLength)]
         self._middleRight = [[[0, 0]]*height
-                             for _ in range(sectionWidth * sectionLength)]
+                             for _ in range(cellWidth * cellLength)]
         self._middleLeft = [[[0, 0]]*height
-                            for _ in range(sectionWidth * sectionLength)]
+                            for _ in range(cellWidth * cellLength)]
         self._rearRight = [[[0, 0]]*height
-                           for _ in range(sectionWidth * sectionLength)]
+                           for _ in range(cellWidth * cellLength)]
         self._rearLeft = [[[0, 0]]*height
-                          for _ in range(sectionWidth * sectionLength)]
+                          for _ in range(cellWidth * cellLength)]
         self._sections = [self._frontLeft, self._frontRight, self._middleLeft,
                           self._middleRight, self._rearLeft, self._rearRight]
         self._singleContainers = []
+
+        self._nrOfContainersOnShip = 0
 
     @property
     def length(self):
@@ -74,14 +77,22 @@ class ContainerShip:
     def singleContainers(self, singleContainers):
         self._singleContainers = singleContainers
 
-    # Good
+    @property
+    def nrOfContainersOnShip(self):
+        return self._nrOfContainersOnShip
+
+    def addContainerToShip(self):
+        self._nrOfContainersOnShip += 1
+
+    def isAboveMinAmountOfContainers(self):
+        return self.nrOfContainersOnShip >= self.height*self.width*self.length/2.5
+
     def hasSingleOnHold(self):
         if len(self.singleContainers) == 0:
             return False
         else:
             return True
 
-    # Good
     def emptySingleContainers(self):
         self.singleContainers = []
 
@@ -111,68 +122,103 @@ class ContainerShip:
         for stack in section:
             totalWeight += self.getTotalWeightOfStack(stack)
         return totalWeight
-    
+
+    def getStarboardWeight(self):
+        return self.getTotalWeightOfSection(self.frontRight) + self.getTotalWeightOfSection(self.middleRight) + self.getTotalWeightOfSection(self.rearRight)
+
+    def getPortsideWeight(self):
+        return self.getTotalWeightOfSection(self.frontLeft) + self.getTotalWeightOfSection(self.middleLeft) + self.getTotalWeightOfSection(self.rearLeft)
+
+    def isStackFull(self, stack):
+        return not stack[-1] == [0, 0]
 
     def isSectionFull(self, section):
         for stack in section:
-            if stack[-1] == [0, 0]:
+            if not self.isStackFull(stack):
                 return False
         return True
-    
+
     def isShipFull(self):
         for section in self.sections:
             if not self.isSectionFull(section):
                 return False
         return True
-    
-    # Returns the lightest section of the ship with available space
-    def getLightestAvailableSection(self):
+
+    def checkSideBalance(self):
+        return not (math.abs(self.getStarboardWeight()-self.getPortsideWeight()) >= self.getStarboardWeight/20)
+
+    def checkSectionBalance(self):
+        for sectionI in self.sections:
+            for sectionJ in self.sections:
+                if math.abs(self.getTotalWeightOfSection(sectionI)-self.getTotalWeightOfSection(sectionJ)) >= self.getTotalWeightOfSection/10:
+                    return False
+        return True
+
+    def isShipBalanced(self):
+        return self.checkSideBalance() and self.checkSectionBalance()
+
+    def getStacksInSectionWithAvailableSpace(self, section):
+        stacksWithAvailableSpace = []
+        for stack in section:
+            if not self.isStackFull(stack):
+                stacksWithAvailableSpace.append(stack)
+        return stacksWithAvailableSpace
+
+    def getSectionsWithAvailableSpace(self):
         sectionsWithAvailableSpace = []
         for section in self.sections:
             if not self.isSectionFull(section):
                 sectionsWithAvailableSpace.append(section)
+        return sectionsWithAvailableSpace
 
+    # Returns the lightest stack in a section with available space
+    def getLightestAvailableStackInSection(self, section):
+        stacksInSectionWithAvailableSpace = self.getStacksInSectionWithAvailableSpace(
+            section)
+        if len(stacksInSectionWithAvailableSpace) == 0:
+            return []
+
+        lightestAvailableStack = stacksInSectionWithAvailableSpace[0]
+
+        for stack in stacksInSectionWithAvailableSpace:
+            if (self.getTotalWeightOfStack(stack) < self.getTotalWeightOfStack(lightestAvailableStack)):
+                lightestAvailableStack = stack
+        if self.isStackFull(lightestAvailableStack):
+            print(lightestAvailableStack[-1])
+            raise ValueError("No available space in section")
+        return lightestAvailableStack
+
+    # Returns the lightest section of the ship with available space
+    def getLightestAvailableSection(self):
+        sectionsWithAvailableSpace = self.getSectionsWithAvailableSpace()
+        if len(sectionsWithAvailableSpace) == 0:
+            return []
         lightestAvailableSection = sectionsWithAvailableSpace[0]
-        for section in sectionsWithAvailableSpace:    
-            if (self.getTotalWeightOfSection(section) <= self.getTotalWeightOfSection(lightestAvailableSection)):
+
+        for section in sectionsWithAvailableSpace:
+            if (self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestAvailableSection)):
                 lightestAvailableSection = section
         if self.isSectionFull(lightestAvailableSection):
             raise ValueError("No available space in ship")
         return lightestAvailableSection
-    """
-    def getLightestAvailableSection(self):
-    lightestSection = self.frontLeft
-    for section in self.sections:
-        if self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestSection):
-            lightestSection = section
-    return lightestSection
-    """
-    
-    # Returns the lightest stack in a section with available space
-    def getLightestAvailableStackInSection(self, section):
-        lightestAvailableStack = section[0]
-        for stack in section:
-            if (self.getTotalWeightOfStack(stack) < self.getTotalWeightOfStack(lightestAvailableStack)) and (stack[-1] == [0, 0]):
-                lightestAvailableStack = stack
-        if lightestAvailableStack[-1] != [0, 0]:
-            print(lightestAvailableStack[-1])
-            raise ValueError("No available space in section")
-        return lightestAvailableStack
-            
 
     def getOptimalLoadPlacementForContainer(self, containerCell):
         if self.isShipFull():
             raise ValueError("Ship is full")
         lightestSection = self.getLightestAvailableSection()
+        if len(lightestSection) == 0:
+            return [], None
         lightestStack = self.getLightestAvailableStackInSection(
             lightestSection)
+        if len(lightestStack) == 0:
+            return [], None
         for i in range(len(lightestStack)):
             if self.isEmptyCell(lightestStack[i]) or self.getTotalWeightOfCell(lightestStack[i]) < self.getTotalWeightOfCell(containerCell):
                 return lightestStack, i
 
     def loadNewContainer(self, container):
         if self.isShipFull():
-            print("feil 1")
+            print("Ship is full!")
             return
         containerCell = []
         if container.length == 20:
@@ -187,11 +233,17 @@ class ContainerShip:
             containerCell = [container, container]
 
         stack, index = self.getOptimalLoadPlacementForContainer(containerCell)
+        if len(stack) == 0 or index is None:
+            print(
+                f"Ship is full, with {self.nrOfContainersOnShip} containers on it")
+            return
         if index == (self.height - 1):
             stack[-1] = containerCell
         else:
             stack.insert(index, containerCell)
             stack.pop(-1)
+
+        self.addContainerToShip()
 
     def loadNewContainerSet(self, containers):
         for container in containers:
@@ -214,7 +266,7 @@ class ContainerShip:
         if position is not None:
             stack, index = position
             container = stack.pop(index)
-            # main.containersInTrondheim.append(container)
+            stack[self.height-1] = [0, 0]
 
     # Prints the load of the ship to a file. Does not impact the load of the ship.
     def print_to_file(self):
@@ -223,14 +275,17 @@ class ContainerShip:
                 for stack in section:
                     for containerCell in stack:
                         if containerCell[0] is not None and containerCell[0] != 0:
-                            f.write(f"{containerCell[0]._length}\t{containerCell[0].loadWeight}\t{containerCell[0]._serialNumber}\n")
+                            f.write(
+                                f"{containerCell[0]._length}\t{containerCell[0].loadWeight}\t{containerCell[0]._serialNumber}\n")
                         if containerCell[1] is not None and containerCell[1] != 0 and containerCell[1]._length == 20:
-                            f.write(f"{containerCell[1]._length}\t{containerCell[1].loadWeight}\t{containerCell[1]._serialNumber}\n")
-    
-    #Loads the containers from the file onto the ship.  
+                            f.write(
+                                f"{containerCell[1]._length}\t{containerCell[1].loadWeight}\t{containerCell[1]._serialNumber}\n")
+
+    # Loads the containers from the file onto the ship.
     def load_from_file(self):
         with open("containers_on_ship.csv", "r") as f:
             for line in f:
                 length, loadWeight, serialNumber = line.strip().split("\t")
-                container = Container(int(length), int(loadWeight), serialNumber)
+                container = Container(
+                    int(length), int(loadWeight), serialNumber)
                 self.loadNewContainer(container)

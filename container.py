@@ -1,13 +1,17 @@
 import re
 
+
 def check_serialNumber_format(serialNumber):
-        match = re.match(r"\d{4}-\d{2}-\d{2}-\d{4}", str(serialNumber))
-        return True if match else False
+    match = re.match(r"\d{4}-\d{2}-\d{2}-\d{4}", str(serialNumber))
+    return True if match else False
+
 
 ContainerManager_year = 2023
 ContainerManager_month = 1
 ContainerManager_day = 27
 ContainerManager_number = 0
+
+
 def ContainerManager_NewSerialNumber():
     global ContainerManager_year
     global ContainerManager_month
@@ -18,8 +22,9 @@ def ContainerManager_NewSerialNumber():
         ContainerManager_year, ContainerManager_month, ContainerManager_day, ContainerManager_number)
     return serialNumber
 
+
 class Container:
-    
+
     def __init__(self, length, loadWeight=0, serialNumber=None):
         if not ((length == 20 and loadWeight <= 20) or (length == 40 and loadWeight <= 22)):
             raise ValueError(
@@ -30,15 +35,14 @@ class Container:
         else:
             self._weight = 4
         self._loadWeight = loadWeight
-        
+
         if(serialNumber == None):
             self._serialNumber = ContainerManager_NewSerialNumber()
-        elif(str(check_serialNumber_format(serialNumber))==False):
+        elif(str(check_serialNumber_format(serialNumber)) == False):
             raise ValueError("Invalid serial number format")
         else:
             self._serialNumber = serialNumber
 
-    
     @property
     def length(self):
         return self._length
@@ -74,4 +78,3 @@ class Container:
 
     def __repr__(self):
         return f"{self.length} + {self.weight + self.loadWeight}"
-
