@@ -101,9 +101,22 @@ print(read_from_file())
 
 print()
 
-ship1 = ContainerShip(24,22, 18)
+ship1 = ContainerShip(6, 4, 2)
+c1 = Container(20, 14)
+c2 = Container(40, 15)
+c3 = Container(20, 12)
+c4 = Container(20, 10)
+c5 = Container(40, 2)
+c6 = Container(40, 20)
 
-ship1.loadNewContainerSet(generateRandomContainerSet(10000))
+cSet = [c1, c2, c3, c4, c5, c6]
+
+ship1.loadNewContainerSet(cSet)
+
+
+print(c1, c2, c3, c4, c5)
+
+# ship1.loadNewContainerSet(generateRandomContainerSet(10000))
 """
 ship1.print_to_file()
 if(ship1.frontLeft[0][0][1]!=0):
@@ -127,7 +140,26 @@ print("Rear left")
 print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
 print("Rear right")
 print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
-"""
+
+print(ship1.lookForContainer("2023-01-27-0001"))
+ship1.unloadContainer(c3.serialNumber)
+
+print(ship1.hasSingleOnHold())
+print("Front left: ")
+print(f"{ship1.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
+print("Front right: ")
+print(f"{ship1.frontRight} weight: {ship1.getTotalWeightOfSection(ship1.frontRight)}")
+print("Middle left")
+print(f"{ship1.middleLeft} weight: {ship1.getTotalWeightOfSection(ship1.middleLeft)}")
+print("Middle right")
+print(f"{ship1.middleRight} weight: {ship1.getTotalWeightOfSection(ship1.middleRight)}")
+print("Rear left")
+print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
+print("Rear right")
+print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
+print(ship1.singleContainers)
+
+
 """
 print(ship2.hasSingleOnHold())
 print("Front left: ")
