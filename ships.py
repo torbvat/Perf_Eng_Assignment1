@@ -161,6 +161,8 @@ class ContainerShip:
         return self.checkSideBalance() and self.checkSectionBalance()
 
     def getStacksInSectionWithAvailableSpace(self, section):
+        #return list(stack for stack in section if not self.isStackFull(stack))
+
         stacksWithAvailableSpace = []
         for stack in section:
             if not self.isStackFull(stack):
@@ -178,7 +180,7 @@ class ContainerShip:
     def getLightestAvailableStackInSection(self, section):
         stacksInSectionWithAvailableSpace = self.getStacksInSectionWithAvailableSpace(
             section)
-        if len(stacksInSectionWithAvailableSpace) == 0:
+        if not len(stacksInSectionWithAvailableSpace):
             return []
 
         lightestAvailableStack = stacksInSectionWithAvailableSpace[0]

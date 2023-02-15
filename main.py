@@ -160,7 +160,6 @@ print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight
 print(ship1.singleContainers)
 
 
-
 """
 # c1, c2, c3 = generateRandomContainerSet(3)
 # ship1 = ContainerShip(6, 4, 4)
@@ -178,9 +177,12 @@ def single_crane_loading_time(ship):
     loadingTime = ship.nrOfContainersOnShip * 4
     return loadingTime
 
-def four_cranes_loading_time(ship):
-    #Finn 4-delt seksjon med høyest antall containere i???
-    return
+def four_cranes_loading_time(ship):    
+    #Four cranes will use at average one minute per container, but we'll add 5% to account for the restrictions of the cranes.
+    #This is an estimate, based on the assumption that the container are equally distributed in the sections of the ship.
+    loadingTime = ship.nrOfContainersOnShip*1.05 
+    return loadingTime
 
 print(ship1._nrOfContainersOnShip)
 print("Minutes used to load or unload the ship with a single crane: ",single_crane_loading_time(ship1))
+print("Minutes used to load or unload the ship with four cranes: ",four_cranes_loading_time(ship1))
