@@ -101,7 +101,7 @@ print(read_from_file())
 
 print()
 
-ship1 = ContainerShip(6, 4, 2)
+ship1 = ContainerShip(24, 22, 18)
 c1 = Container(20, 14)
 c2 = Container(40, 15)
 c3 = Container(20, 12)
@@ -111,7 +111,7 @@ c6 = Container(40, 20)
 
 cSet = [c1, c2, c3, c4, c5, c6]
 
-ship1.loadNewContainerSet(cSet)
+ship1.loadNewContainerSet(generateRandomContainerSet(10000))
 
 
 print(c1, c2, c3, c4, c5)
@@ -178,9 +178,25 @@ def single_crane_loading_time(ship):
     return loadingTime
 
 def four_cranes_loading_time(ship):    
-    #Four cranes will use at average one minute per container, but we'll add 5% to account for the restrictions of the cranes.
-    #This is an estimate, based on the assumption that the container are equally distributed in the sections of the ship.
-    loadingTime = ship.nrOfContainersOnShip*1.05 
+    loadingTime = 0
+    ordered_containerCells = []
+    amountOfContainersInSections = {"containersInSection1": 0, "containersInSection2": 0, "containersInSection3": 0, "containersInSection4":0}
+    for section in ship._sections:
+        for stack in section:
+            for containerCell in stack:
+                ordered_containerCells.append(containerCell)
+    for i in range(4):
+        for containerCell in ordered_containerCells[len(ordered_containerCells)//4*i:len(ordered_containerCells)//4*(i+1)]:
+            if containerCell[1].length == 20:
+                amountOfContainersInSections["containersInSection"+str(i+1)] += 2
+            elif containerCell[1].length == 40:
+                amountOfContainersInSections["containersInSection"+str(i+1)] += 1
+            else:
+                continue
+    print(amountOfContainersInSections)
+    amountOfContainersInSectionWithMostContainers = max(amountOfContainersInSections.values())
+    #Assuming that the restrictions for the cranes are satisfied without time delay:
+    loadingTime = amountOfContainersInSectionWithMostContainers * 4
     return loadingTime
 
 print(ship1._nrOfContainersOnShip)
