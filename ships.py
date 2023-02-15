@@ -256,17 +256,23 @@ class ContainerShip:
     def lookForContainer(self, serialNumber):
         for section in self.sections:
             for stack in section:
-                for container in stack:
-                    if container.serialNumber is not None and container.serialNumber == serialNumber:
-                        return stack, stack.index(container), container
+                for containerCell in stack:
+                    for container in containerCell:
+                        if container != 0 and container.serialNumber == serialNumber:
+                            return stack, stack.index(containerCell)
         raise ValueError("Container could not be found on the ship")
 
-    def unload_container(self, serialNumber):
+    def unloadContainer(self, serialNumber):
         position = self.lookForContainer(serialNumber)
         if position is not None:
             stack, index = position
-            container = stack.pop(index)
-            stack[self.height-1] = [0, 0]
+            containerCell = stack.pop(index)
+            stack.append([0, 0])
+            if containerCell[0].length == 20:
+                if containerCell[0].serialNumber == serialNumber:
+                    self.loadNewContainer(containerCell[1])
+                else:
+                    self.loadNewContainer(containerCell[0])
 
     # Prints the load of the ship to a file. Does not impact the load of the ship.
     def print_to_file(self):
