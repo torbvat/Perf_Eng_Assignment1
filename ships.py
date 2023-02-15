@@ -81,8 +81,11 @@ class ContainerShip:
     def nrOfContainersOnShip(self):
         return self._nrOfContainersOnShip
 
-    def addContainerToShip(self):
-        self._nrOfContainersOnShip += 1
+    def addContainerToShip(self, containerCell):
+        if containerCell[0].length == 20:
+            self._nrOfContainersOnShip += 2
+        else:
+            self._nrOfContainersOnShip += 1
 
     def isAboveMinAmountOfContainers(self):
         return self.nrOfContainersOnShip >= self.height*self.width*self.length/2.5
@@ -187,31 +190,30 @@ class ContainerShip:
             print(lightestAvailableStack[-1])
             raise ValueError("No available space in section")
         return lightestAvailableStack
-
-    # Returns the lightest section of the ship with available space
+    
+        
     def getLightestAvailableSection(self):
-        sectionsWithAvailableSpace = self.getSectionsWithAvailableSpace()
-        if len(sectionsWithAvailableSpace) == 0:
-            return []
-        lightestAvailableSection = sectionsWithAvailableSpace[0]
-
-        for section in sectionsWithAvailableSpace:
-            if (self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestAvailableSection)):
-                lightestAvailableSection = section
-        if self.isSectionFull(lightestAvailableSection):
+        sectionsWithAvailableSpace = [section for section in self.sections if not self.isSectionFull(section)]
+        if not sectionsWithAvailableSpace:
             raise ValueError("No available space in ship")
+        lightestAvailableSection = sectionsWithAvailableSpace[0]
+        for section in sectionsWithAvailableSpace:
+            if self.getTotalWeightOfSection(section) < self.getTotalWeightOfSection(lightestAvailableSection):
+                lightestAvailableSection = section
         return lightestAvailableSection
 
     def getOptimalLoadPlacementForContainer(self, containerCell):
         if self.isShipFull():
             raise ValueError("Ship is full")
+        
         lightestSection = self.getLightestAvailableSection()
-        if len(lightestSection) == 0:
+        if not lightestSection:
             return [], None
-        lightestStack = self.getLightestAvailableStackInSection(
-            lightestSection)
-        if len(lightestStack) == 0:
+        
+        lightestStack = self.getLightestAvailableStackInSection(lightestSection)
+        if not lightestStack:
             return [], None
+        
         for i in range(len(lightestStack)):
             if self.isEmptyCell(lightestStack[i]) or self.getTotalWeightOfCell(lightestStack[i]) < self.getTotalWeightOfCell(containerCell):
                 return lightestStack, i
@@ -243,7 +245,7 @@ class ContainerShip:
             stack.insert(index, containerCell)
             stack.pop(-1)
 
-        self.addContainerToShip()
+        self.addContainerToShip(containerCell)
 
     def loadNewContainerSet(self, containers):
         for container in containers:

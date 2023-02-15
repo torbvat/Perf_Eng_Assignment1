@@ -101,7 +101,7 @@ print(read_from_file())
 
 print()
 
-ship1 = ContainerShip(6, 4, 2)
+ship1 = ContainerShip(24,22, 18)
 
 ship1.loadNewContainerSet(generateRandomContainerSet(10000))
 """
@@ -112,6 +112,7 @@ ship2 = ContainerShip(6, 4, 4)
 ship2.load_from_file()
 if(ship2.frontLeft[0][0][1]!=0):
     print(ship2.frontLeft[0][0][1].serialNumber)
+"""
 """
 print(ship1.hasSingleOnHold())
 print("Front left: ")
@@ -126,7 +127,7 @@ print("Rear left")
 print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
 print("Rear right")
 print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
-
+"""
 """
 print(ship2.hasSingleOnHold())
 print("Front left: ")
@@ -164,3 +165,17 @@ print(f"{ship2.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight
 # print(f"{c2.length} + {c2.totalWeight}")
 # print(f"{c3.length} + {c3.totalWeight}")
 # print(ship1.getTotalWeightOfCell(liste[0]))
+
+#--------------------
+#Docks
+
+def single_crane_loading_time(ship):
+    loadingTime = ship.nrOfContainersOnShip * 4
+    return loadingTime
+
+def four_cranes_loading_time(ship):
+    #Finn 4-delt seksjon med høyest antall containere i.
+    return
+
+print(ship1._nrOfContainersOnShip)
+print("Minutes used to load or unload the ship with a single crane: ",single_crane_loading_time(ship1))
