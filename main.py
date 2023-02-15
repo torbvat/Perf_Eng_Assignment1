@@ -161,37 +161,9 @@ print(ship1.singleContainers)
 
 
 """
-print(ship2.hasSingleOnHold())
-print("Front left: ")
-print(f"{ship2.frontLeft} weight: {ship2.getTotalWeightOfSection(ship2.frontLeft)}")
-print("Front right: ")
-print(f"{ship2.frontRight} weight: {ship2.getTotalWeightOfSection(ship2.frontRight)}")
-print("Middle left")
-print(f"{ship2.middleLeft} weight: {ship2.getTotalWeightOfSection(ship2.middleLeft)}")
-print("Middle right")
-print(f"{ship2.middleRight} weight: {ship2.getTotalWeightOfSection(ship2.middleRight)}")
-print("Rear left")
-print(f"{ship2.rearLeft} weight: {ship2.getTotalWeightOfSection(ship2.rearLeft)}")
-print("Rear right")
-print(f"{ship2.rearRight} weight: {ship2.getTotalWeightOfSection(ship2.rearRight)}")
-"""
-
-"""
-print("Front left: ")
-print(f"{ship2.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
-print("Front right: ")
-print(f"{ship2.frontRight} weight: {ship1.getTotalWeightOfSection(ship1.frontRight)}")
-print("Middle left")
-print(f"{ship2.middleLeft} weight: {ship1.getTotalWeightOfSection(ship1.middleLeft)}")
-print("Middle right")
-print(f"{ship2.middleRight} weight: {ship1.getTotalWeightOfSection(ship1.middleRight)}")
-print("Rear left")
-print(f"{ship2.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
-print("Rear right")
-print(f"{ship2.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
 # c1, c2, c3 = generateRandomContainerSet(3)
 # ship1 = ContainerShip(6, 4, 4)
-"""
+
 # liste = [[c1, c1], [c2, c3]]
 # print(f"{c1.length} + {c1.totalWeight}")
 # print(f"{c2.length} + {c2.totalWeight}")
@@ -205,9 +177,12 @@ def single_crane_loading_time(ship):
     loadingTime = ship.nrOfContainersOnShip * 4
     return loadingTime
 
-def four_cranes_loading_time(ship):
-    #Finn 4-delt seksjon med høyest antall containere i.
-    return
+def four_cranes_loading_time(ship):    
+    #Four cranes will use at average one minute per container, but we'll add 5% to account for the restrictions of the cranes.
+    #This is an estimate, based on the assumption that the container are equally distributed in the sections of the ship.
+    loadingTime = ship.nrOfContainersOnShip*1.05 
+    return loadingTime
 
 print(ship1._nrOfContainersOnShip)
 print("Minutes used to load or unload the ship with a single crane: ",single_crane_loading_time(ship1))
+print("Minutes used to load or unload the ship with four cranes: ",four_cranes_loading_time(ship1))
