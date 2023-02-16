@@ -294,7 +294,7 @@ class ContainerShip:
                     self.loadNewContainer(containerCell[0])
 
     # Prints the load of the ship to a file. Does not impact the load of the ship.
-    def print_to_file(self):
+    def printToFile(self):
         with open("containers_on_ship.csv", "w") as f:
             for section in self.sections:
                 for stack in section:
@@ -307,7 +307,7 @@ class ContainerShip:
                                 f"{containerCell[1]._length}\t{containerCell[1].loadWeight}\t{containerCell[1]._serialNumber}\n")
 
     # Loads the containers from the file onto the ship.
-    def load_from_file(self):
+    def loadFromFile(self):
         with open("containers_on_ship.csv", "r") as f:
             for line in f:
                 length, loadWeight, serialNumber = line.strip().split("\t")
