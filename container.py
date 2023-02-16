@@ -77,4 +77,4 @@ class Container:
         return self._serialNumber
 
     def __repr__(self):
-        return f"{self.loadWeight}"
+        return f"{self.totalWeight}"
