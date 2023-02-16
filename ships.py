@@ -1,6 +1,4 @@
 from container import Container
-import math
-# import main
 
 
 class ContainerShip:
@@ -84,8 +82,11 @@ class ContainerShip:
     def addContainerToShip(self):
         self._nrOfContainersOnShip += 1
 
+    def removeContainerFromShip(self):
+        self._nrOfContainersOnShip -= 1
+
     def isAboveMinAmountOfContainers(self):
-        return self.nrOfContainersOnShip >= self.height*self.width*self.length/2.5
+        return self.nrOfContainersOnShip >= self.height*self.width*(self.length/2)/2.5
 
     def hasSingleOnHold(self):
         if len(self.singleContainers) == 0:
@@ -144,18 +145,25 @@ class ContainerShip:
                 return False
         return True
 
-    def checkSideBalance(self):
-        return not (math.abs(self.getStarboardWeight()-self.getPortsideWeight()) >= self.getStarboardWeight/20)
+    def areSidesBalanced(self):
+        return abs(self.getStarboardWeight()/self.getPortsideWeight()) <= 1.05 and (abs(self.getStarboardWeight()/self.getPortsideWeight()) >= 0.95)
 
-    def checkSectionBalance(self):
-        for sectionI in self.sections:
-            for sectionJ in self.sections:
-                if math.abs(self.getTotalWeightOfSection(sectionI)-self.getTotalWeightOfSection(sectionJ)) >= self.getTotalWeightOfSection/10:
+    def areSectionsBalanced(self):
+        sectionFront = self.getTotalWeightOfSection(
+            self.frontLeft) + self.getTotalWeightOfSection(self.frontRight)
+        sectionMiddle = self.getTotalWeightOfSection(
+            self.middleLeft) + self.getTotalWeightOfSection(self.middleRight)
+        sectionRear = self.getTotalWeightOfSection(
+            self.rearLeft) + self.getTotalWeightOfSection(self.rearRight)
+        sections = [sectionFront, sectionMiddle, sectionRear]
+        for sectionI in sections:
+            for sectionJ in sections:
+                if abs(sectionI/sectionJ) >= 1.10 or abs(sectionI/sectionJ) <= 0.90:
                     return False
         return True
 
     def isShipBalanced(self):
-        return self.checkSideBalance() and self.checkSectionBalance()
+        return self.areSidesBalanced() and self.areSectionsBalanced()
 
     def getStacksInSectionWithAvailableSpace(self, section):
         stacksWithAvailableSpace = []
@@ -244,6 +252,13 @@ class ContainerShip:
             stack.pop(-1)
 
         self.addContainerToShip()
+
+        if self.isAboveMinAmountOfContainers():
+            if not self.isShipBalanced():
+                self.unloadContainer(container.serialNumber)
+                self.removeContainerFromShip()
+                print(
+                    f"Container {container.serialNumber} could not be loaded due to balancing issues.")
 
     def loadNewContainerSet(self, containers):
         for container in containers:
