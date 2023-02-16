@@ -67,27 +67,6 @@ def read_from_file():
 
 containersInTrondheim = []
 
-# Main
-# --------------------
-
-ship1 = ContainerShip(24, 22, 18)
-
-ship1.loadNewContainerSet(generateRandomContainerSet(10000))
-
-print(ship1.hasSingleOnHold())
-print("Front left: ")
-print(f"{ship1.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
-print("Front right: ")
-print(f"{ship1.frontRight} weight: {ship1.getTotalWeightOfSection(ship1.frontRight)}")
-print("Middle left")
-print(f"{ship1.middleLeft} weight: {ship1.getTotalWeightOfSection(ship1.middleLeft)}")
-print("Middle right")
-print(f"{ship1.middleRight} weight: {ship1.getTotalWeightOfSection(ship1.middleRight)}")
-print("Rear left")
-print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
-print("Rear right")
-print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
-
 # --------------------
 # Docks
 
@@ -116,15 +95,36 @@ def fourCranesLoadingTime(ship):
                                              str(i+1)] += 1
             else:
                 continue
-    print(amountOfContainersInSections)
     amountOfContainersInSectionWithMostContainers = max(
         amountOfContainersInSections.values())
     # Assuming that the restrictions for the cranes are satisfied without time delay:
     loadingTime = amountOfContainersInSectionWithMostContainers * 4
     return loadingTime
 
+# Main
+# --------------------
 
-print(ship1._nrOfContainersOnShip)
+
+ship1 = ContainerShip(24, 22, 18)
+
+ship1.loadNewContainerSet(generateRandomContainerSet(10000))
+
+print(ship1.hasSingleOnHold())
+print("Front left: ")
+print(f"{ship1.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
+print("Front right: ")
+print(f"{ship1.frontRight} weight: {ship1.getTotalWeightOfSection(ship1.frontRight)}")
+print("Middle left")
+print(f"{ship1.middleLeft} weight: {ship1.getTotalWeightOfSection(ship1.middleLeft)}")
+print("Middle right")
+print(f"{ship1.middleRight} weight: {ship1.getTotalWeightOfSection(ship1.middleRight)}")
+print("Rear left")
+print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
+print("Rear right")
+print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
+
+print(
+    f"Amount of containers on ship: {ship1.nrOfContainersOnShip} containers.")
 print("Minutes used to load or unload the ship with a single crane: ",
       singleCraneLoadingTime(ship1))
 print("Minutes used to load or unload the ship with four cranes: ",
