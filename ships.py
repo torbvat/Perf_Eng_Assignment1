@@ -127,6 +127,13 @@ class ContainerShip:
             totalWeight += self.getTotalWeightOfStack(stack)
         return totalWeight
 
+    # Assuming that the weight of the ship itself is 0.
+    def getTotalWeightOfShip(self):
+        totalWeight = 0
+        for section in self.sections:
+            totalWeight += self.getTotalWeightOfSection(section)
+        return totalWeight
+
     def getStarboardWeight(self):
         return self.getTotalWeightOfSection(self.frontRight) + self.getTotalWeightOfSection(self.middleRight) + self.getTotalWeightOfSection(self.rearRight)
 
@@ -264,12 +271,15 @@ class ContainerShip:
                 self.removeContainerFromShip()
 
     def loadNewContainerSet(self, containers):
+        sorted_containers = sorted(
+            containers, key=lambda container: container.weight)
         for container in containers:
             if self.isShipFull():
                 print("Ship is full")
                 return
             else:
                 self.loadNewContainer(container)
+        return sorted_containers
 
     def lookForContainer(self, serialNumber):
         for section in self.sections:
@@ -310,8 +320,8 @@ class ContainerShip:
 
     # Prints the load of the ship to a file. Does not impact the load of the ship.
 
-    def printToFile_Ship(self):
-        with open("containers_on_ship.csv", "w") as f:
+    def printToFile_Ship(self, filename):
+        with open(filename, "w") as f:
             for section in self.sections:
                 for stack in section:
                     for containerCell in stack:
@@ -324,8 +334,8 @@ class ContainerShip:
                                     f"{containerCell[1].length}\t{containerCell[1].loadWeight}\t{containerCell[1].serialNumber}\n")
 
     # Loads the containers from the file onto the ship.
-    def loadFromFile_Ship(self):
-        with open("containers_on_ship.csv", "r") as f:
+    def loadFromFile_Ship(self, filename):
+        with open(filename, "r") as f:
             for line in f:
                 length, loadWeight, serialNumber = line.strip().split("\t")
                 container = Container(

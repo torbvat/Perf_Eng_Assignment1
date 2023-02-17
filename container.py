@@ -1,9 +1,11 @@
 import re
 from datetime import date
 
+
 def check_serialNumber_format(serialNumber):
     match = re.match(r"\d{4}-\d{2}-\d{2}-\d{4}", str(serialNumber))
     return True if match else False
+
 
 todaysDate = date.today()
 ContainerManager_year = todaysDate.year
@@ -77,4 +79,4 @@ class Container:
         return self._serialNumber
 
     def __repr__(self):
-        return f"{self.totalWeight}"
+        return f"{self.length} + {self.totalWeight}"
