@@ -68,12 +68,8 @@ def loadFromFile_Container():
             containerSet.append(container)
     return containerSet
 
-
-# printToFile_Container(generateRandomContainerSet(20))
-# print(loadFromFile_Container())
-# --------------------
 # Docks
-
+# --------------------
 
 def singleCraneLoadingTime(ship):
     loadingTime = ship.nrOfContainersOnShip * 4
@@ -159,29 +155,21 @@ def task4():
     print(loadedSet)
     print()
 
-
-# task2()
-# task3()
-# task4()
-
-
-# Task 5:
-
-
 def task5():
-    ship = ContainerShip(6, 4, 2)
+    ship = ContainerShip(24, 22, 18)
     print("\n Task 5:\n")
     # Looks for container in ship
-    test_container = generateRandomContainer()
-    indexOfContainer = ship.lookForContainer(test_container.serialNumber)
+    test_container = Container(40, 10)
+    ship.loadNewContainer(test_container)
+    stack, indexOfContainer = ship.lookForContainer(test_container.serialNumber)
     print(
-        f"Placement of container (stack, index in stack): {indexOfContainer}")
+        f"Placement of container (stack, index in stack): {stack, indexOfContainer}")
 
     # Look for a place where a container (cell) can be loaded:
     test_cell = [Container(20, 5), Container(20, 10)]
-    availablePlace = ship.getOptimalLoadPlacementForContainer(test_cell)
+    stack, indexOfContainer = ship.getOptimalLoadPlacementForContainer(test_cell)
     print(
-        f"Available place for container cell (stack, index in stack): {availablePlace}")
+        f"Available place for container cell (stack, index in stack): {stack, indexOfContainer}")
 
     # Load a container into ship:
 
@@ -190,8 +178,8 @@ def task6And7():
 
     print("\n Task 6 and 7:\n")
     # Loading a ship with 24 containers and returns the corresponding ordered list of containers
-    ship = ContainerShip(6, 4, 2)
-    print(ship.loadNewContainerSet(generateRandomContainerSet(24)))
+    ship = ContainerShip(24, 22, 18)
+    ship.loadNewContainerSet(generateRandomContainerSet(24))
     print("Front left: ")
     print(f"{ship.frontLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.frontLeft)}")
     print("Front right: ")
@@ -211,6 +199,7 @@ def task6And7():
     # Unloads the ship
     ship.removeAllContainersFromShip()
     print("Front left: ")
+    print(ship.frontLeft)
     print(f"{ship.frontLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.frontLeft)}")
     print("Front right: ")
     print(f"{ship.frontRight} Sectionweight: {ship.getTotalWeightOfSection(ship.frontRight)}")
@@ -241,82 +230,21 @@ def task6And7():
 
 def task9():
     print("\nTask 9:\n")
-    ship = ContainerShip(6, 4, 2)
-    ship.loadNewContainerSet(generateRandomContainerSet(24))
-    print(f"Total weight of ship: {ship.getTotalWeightOfShip}")
-
-
-def testShipFunctions():
-    c1 = Container(20, 10)
-    c2 = Container(40, 8)
-    c3 = Container(20, 12)
-    c4 = Container(40, 20)
-    c5 = Container(40, 18)
-
-    cSet = [c4, c5]
-
     ship = ContainerShip(24, 22, 18)
+    ship.loadNewContainerSet(generateRandomContainerSet(10000))
+    print(f"Total weight of ship: {ship.getTotalWeightOfShip()}")
 
-    ship.loadNewContainer(c1)
-    ship.loadNewContainer(c2)
-    ship.loadNewContainer(c3)
-    ship.loadNewContainerSet(cSet)
+def task11and12():
+    print("\nTask 11 and 12:\n")
+    ship = ContainerShip(24, 22, 18)
+    ship.loadNewContainerSet(generateRandomContainerSet(10000))
+    print(f"Total loading time of ship using four cranes: {fourCranesLoadingTime(ship)}")
+    print(f"Total loading time of ship using one crane: {singleCraneLoadingTime(ship)}")
 
-    print("Ship after loading 5 containers")
-    print("Front left: ")
-    print(f"{ship.frontLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.frontLeft)}")
-    print("Front right: ")
-    print(f"{ship.frontRight} Sectionweight: {ship.getTotalWeightOfSection(ship.frontRight)}")
-    print("Middle left")
-    print(f"{ship.middleLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.middleLeft)}")
-    print("Middle right")
-    print(f"{ship.middleRight} Sectionweight: {ship.getTotalWeightOfSection(ship.middleRight)}")
-    print("Rear left")
-    print(f"{ship.rearLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.rearLeft)}")
-    print("Rear right")
-    print(f"{ship.rearRight} Sectionweight: {ship.getTotalWeightOfSection(ship.rearRight)}")
-    ship.unloadContainer(c2.serialNumber)
-
-    ship.loadNewContainerSet(generateRandomContainerSet(9000))
-
-    print("Ship after attempting to load 9000 containers")
-    print("Front left: ")
-    print(f"{ship.frontLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.frontLeft)}")
-    print("Front right: ")
-    print(f"{ship.frontRight} Sectionweight: {ship.getTotalWeightOfSection(ship.frontRight)}")
-    print("Middle left")
-    print(f"{ship.middleLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.middleLeft)}")
-    print("Middle right")
-    print(f"{ship.middleRight} Sectionweight: {ship.getTotalWeightOfSection(ship.middleRight)}")
-    print("Rear left")
-    print(f"{ship.rearLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.rearLeft)}")
-    print("Rear right")
-    print(f"{ship.rearRight} Sectionweight: {ship.getTotalWeightOfSection(ship.rearRight)}")
-
-
-# ship.loadNewContainerSet(generateRandomContainerSet(8000))
-"""
-print(ship.hasSingleOnHold())
-print("Front left: ")
-print(f"{ship.frontLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.frontLeft)}")
-print("Front right: ")
-print(f"{ship.frontRight} Sectionweight: {ship.getTotalWeightOfSection(ship.frontRight)}")
-print("Middle left")
-print(f"{ship.middleLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.middleLeft)}")
-print("Middle right")
-print(f"{ship.middleRight} Sectionweight: {ship.getTotalWeightOfSection(ship.middleRight)}")
-print("Rear left")
-print(f"{ship.rearLeft} Sectionweight: {ship.getTotalWeightOfSection(ship.rearLeft)}")
-print("Rear right")
-print(f"{ship.rearRight} Sectionweight: {ship.getTotalWeightOfSection(ship.rearRight)}")
-
-print(
-    f"Amount of containers on ship: {ship.nrOfContainersOnShip} containers.")
-print("Minutes used to load or unload the ship with a single crane: ",
-      singleCraneLoadingTime(ship))
-print("Minutes used to load or unload the ship with four cranes: ",
-      fourCranesLoadingTime(ship))
-"""
-print()
-# containersInTrondheim.append(ship.removeAllContainersFromShip())
-# print(containersInTrondheim)
+#task2()
+#task3()
+#task4()
+#task5()
+#task6And7()
+#task9()
+#task11and12()

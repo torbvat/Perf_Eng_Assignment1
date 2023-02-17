@@ -285,9 +285,10 @@ class ContainerShip:
         for section in self.sections:
             for stack in section:
                 for containerCell in stack:
-                    for container in containerCell:
-                        if container != 0 and container.serialNumber == serialNumber:
-                            return stack, stack.index(containerCell)
+                    if not self.isEmptyCell(containerCell):
+                        for container in containerCell:
+                            if container != 0 and container.serialNumber == serialNumber:
+                                return stack, stack.index(containerCell)
         raise ValueError("Container could not be found on the ship")
 
     def unloadContainer(self, serialNumber):
@@ -308,14 +309,12 @@ class ContainerShip:
             for stack in section:
                 for containerCell in stack:
                     if not self.isEmptyCell(containerCell):
-                        for container in containerCell:
-                            if container != 0:
-                                container1 = containerCell.pop()
-                                container2 = containerCell.pop()
-                                containerCell = [0, 0]
-                                removedContainers.append(container1)
-                                if container.length == 20:
-                                    removedContainers.append(container2)
+                        container1 = containerCell[0]
+                        container2 = containerCell[1]
+                        stack[stack.index(containerCell)] = [0, 0]
+                        removedContainers.append(container1)
+                        if container1.length == 20:
+                            removedContainers.append(container2)
         return removedContainers
 
     # Prints the load of the ship to a file. Does not impact the load of the ship.
