@@ -318,7 +318,6 @@ class ContainerShip:
         return removedContainers
 
     # Prints the load of the ship to a file. Does not impact the load of the ship.
-
     def printToFile_Ship(self, filename):
         with open(filename, "w") as f:
             for section in self.sections:
