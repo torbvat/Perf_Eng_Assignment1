@@ -108,21 +108,21 @@ def fourCranesLoadingTime(ship):
 
 ship1 = ContainerShip(24, 22, 18)
 
-ship1.loadNewContainerSet(generateRandomContainerSet(10000))
+ship1.loadNewContainerSet(generateRandomContainerSet(8000))
 
 print(ship1.hasSingleOnHold())
 print("Front left: ")
-print(f"{ship1.frontLeft} weight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
+print(f"{ship1.frontLeft} Sectionweight: {ship1.getTotalWeightOfSection(ship1.frontLeft)}")
 print("Front right: ")
-print(f"{ship1.frontRight} weight: {ship1.getTotalWeightOfSection(ship1.frontRight)}")
+print(f"{ship1.frontRight} Sectionweight: {ship1.getTotalWeightOfSection(ship1.frontRight)}")
 print("Middle left")
-print(f"{ship1.middleLeft} weight: {ship1.getTotalWeightOfSection(ship1.middleLeft)}")
+print(f"{ship1.middleLeft} Sectionweight: {ship1.getTotalWeightOfSection(ship1.middleLeft)}")
 print("Middle right")
-print(f"{ship1.middleRight} weight: {ship1.getTotalWeightOfSection(ship1.middleRight)}")
+print(f"{ship1.middleRight} Sectionweight: {ship1.getTotalWeightOfSection(ship1.middleRight)}")
 print("Rear left")
-print(f"{ship1.rearLeft} weight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
+print(f"{ship1.rearLeft} Sectionweight: {ship1.getTotalWeightOfSection(ship1.rearLeft)}")
 print("Rear right")
-print(f"{ship1.rearRight} weight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
+print(f"{ship1.rearRight} Sectionweight: {ship1.getTotalWeightOfSection(ship1.rearRight)}")
 
 print(
     f"Amount of containers on ship: {ship1.nrOfContainersOnShip} containers.")
@@ -132,5 +132,7 @@ print("Minutes used to load or unload the ship with four cranes: ",
       fourCranesLoadingTime(ship1))
 
 print()
-containersInTrondheim.append(ship1.removeAllContainersFromShip())
-print(containersInTrondheim)
+# containersInTrondheim.append(ship1.removeAllContainersFromShip())
+# print(containersInTrondheim)
+
+ship1.printToFile()

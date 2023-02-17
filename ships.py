@@ -315,12 +315,13 @@ class ContainerShip:
             for section in self.sections:
                 for stack in section:
                     for containerCell in stack:
-                        if containerCell[0] is not None and containerCell[0] != 0:
-                            f.write(
-                                f"{containerCell[0]._length}\t{containerCell[0].loadWeight}\t{containerCell[0]._serialNumber}\n")
-                        if containerCell[1] is not None and containerCell[1] != 0 and containerCell[1]._length == 20:
-                            f.write(
-                                f"{containerCell[1]._length}\t{containerCell[1].loadWeight}\t{containerCell[1]._serialNumber}\n")
+                        if not self.isEmptyCell(containerCell):
+                            if containerCell[0] is not None and containerCell[0] != 0:
+                                f.write(
+                                    f"{containerCell[0].length}\t{containerCell[0].loadWeight}\t{containerCell[0].serialNumber}\n")
+                            if containerCell[1] is not None and containerCell[1] != 0 and containerCell[1].length == 20:
+                                f.write(
+                                    f"{containerCell[1].length}\t{containerCell[1].loadWeight}\t{containerCell[1].serialNumber}\n")
 
     # Loads the containers from the file onto the ship.
     def loadFromFile(self):
