@@ -1,14 +1,14 @@
 import re
-
+from datetime import date
 
 def check_serialNumber_format(serialNumber):
     match = re.match(r"\d{4}-\d{2}-\d{2}-\d{4}", str(serialNumber))
     return True if match else False
 
-
-ContainerManager_year = 2023
-ContainerManager_month = 1
-ContainerManager_day = 27
+todaysDate = date.today()
+ContainerManager_year = todaysDate.year
+ContainerManager_month = todaysDate.month
+ContainerManager_day = todaysDate.day
 ContainerManager_number = 0
 
 

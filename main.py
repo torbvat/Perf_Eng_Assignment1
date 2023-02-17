@@ -48,14 +48,14 @@ def generateRandomContainerSet(n):
 # --------------------
 
 
-def write_to_file(containerSet):
+def printToFile_Container(containerSet):
     with open("containers.csv", "w") as f:
         for container in containerSet:
             f.write(
                 f"{container.length}\t{container.weight}\t{container.loadWeight}\t{container.serialNumber}\n")
 
 
-def read_from_file():
+def loadFromFile_Container():
     containerSet = []
     with open("containers.csv", "r") as f:
         for line in f:
@@ -135,4 +135,4 @@ print()
 # containersInTrondheim.append(ship1.removeAllContainersFromShip())
 # print(containersInTrondheim)
 
-ship1.printToFile()
+ship1.printToFile_Ship()
