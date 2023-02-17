@@ -44,7 +44,7 @@ def generateRandomContainerSet(n):
         randomContainerSet.append(generateRandomContainer())
     return randomContainerSet
 
-# 5. Container Manager
+# Container Manager
 # --------------------
 
 
@@ -87,14 +87,15 @@ def fourCranesLoadingTime(ship):
                 ordered_containerCells.append(containerCell)
     for i in range(4):
         for containerCell in ordered_containerCells[len(ordered_containerCells)//4*i:len(ordered_containerCells)//4*(i+1)]:
-            if containerCell[1].length == 20:
-                amountOfContainersInSections["containersInSection" +
-                                             str(i+1)] += 2
-            elif containerCell[1].length == 40:
-                amountOfContainersInSections["containersInSection" +
-                                             str(i+1)] += 1
-            else:
-                continue
+            if not containerCell == [0, 0]:
+                if containerCell[1].length == 20:
+                    amountOfContainersInSections["containersInSection" +
+                                                 str(i+1)] += 2
+                elif containerCell[1].length == 40:
+                    amountOfContainersInSections["containersInSection" +
+                                                 str(i+1)] += 1
+                else:
+                    continue
     amountOfContainersInSectionWithMostContainers = max(
         amountOfContainersInSections.values())
     # Assuming that the restrictions for the cranes are satisfied without time delay:
@@ -129,3 +130,7 @@ print("Minutes used to load or unload the ship with a single crane: ",
       singleCraneLoadingTime(ship1))
 print("Minutes used to load or unload the ship with four cranes: ",
       fourCranesLoadingTime(ship1))
+
+print()
+containersInTrondheim.append(ship1.removeAllContainersFromShip())
+print(containersInTrondheim)

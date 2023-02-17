@@ -169,7 +169,7 @@ class ContainerShip:
         return self.areSidesBalanced() and self.areSectionsBalanced()
 
     def getStacksInSectionWithAvailableSpace(self, section):
-        #return list(stack for stack in section if not self.isStackFull(stack))
+        # return list(stack for stack in section if not self.isStackFull(stack))
 
         stacksWithAvailableSpace = []
         for stack in section:
@@ -200,10 +200,10 @@ class ContainerShip:
             print(lightestAvailableStack[-1])
             raise ValueError("No available space in section")
         return lightestAvailableStack
-    
-        
+
     def getLightestAvailableSection(self):
-        sectionsWithAvailableSpace = [section for section in self.sections if not self.isSectionFull(section)]
+        sectionsWithAvailableSpace = [
+            section for section in self.sections if not self.isSectionFull(section)]
         if not sectionsWithAvailableSpace:
             raise ValueError("No available space in ship")
         lightestAvailableSection = sectionsWithAvailableSpace[0]
@@ -215,15 +215,16 @@ class ContainerShip:
     def getOptimalLoadPlacementForContainer(self, containerCell):
         if self.isShipFull():
             raise ValueError("Ship is full")
-        
+
         lightestSection = self.getLightestAvailableSection()
         if not lightestSection:
             return [], None
-        
-        lightestStack = self.getLightestAvailableStackInSection(lightestSection)
+
+        lightestStack = self.getLightestAvailableStackInSection(
+            lightestSection)
         if not lightestStack:
             return [], None
-        
+
         for i in range(len(lightestStack)):
             if self.isEmptyCell(lightestStack[i]) or self.getTotalWeightOfCell(lightestStack[i]) < self.getTotalWeightOfCell(containerCell):
                 return lightestStack, i
@@ -261,8 +262,6 @@ class ContainerShip:
             if not self.isShipBalanced():
                 self.unloadContainer(container.serialNumber)
                 self.removeContainerFromShip()
-                print(
-                    f"Container {container.serialNumber} could not be loaded due to balancing issues.")
 
     def loadNewContainerSet(self, containers):
         for container in containers:
@@ -293,7 +292,24 @@ class ContainerShip:
                 else:
                     self.loadNewContainer(containerCell[0])
 
+    def removeAllContainersFromShip(self):
+        removedContainers = []
+        for section in self.sections:
+            for stack in section:
+                for containerCell in stack:
+                    if not self.isEmptyCell(containerCell):
+                        for container in containerCell:
+                            if container != 0:
+                                container1 = containerCell.pop()
+                                container2 = containerCell.pop()
+                                containerCell = [0, 0]
+                                removedContainers.append(container1)
+                                if container.length == 20:
+                                    removedContainers.append(container2)
+        return removedContainers
+
     # Prints the load of the ship to a file. Does not impact the load of the ship.
+
     def printToFile(self):
         with open("containers_on_ship.csv", "w") as f:
             for section in self.sections:
